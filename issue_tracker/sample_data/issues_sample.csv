@@ -1,0 +1,7 @@
+title,description,status
+Login bug,Login fails with correct credentials,open
+UI alignment issue,Button overlaps text on mobile,in_progress
+Crash on submit,Application crashes on form submit,open
+Password reset bug,Reset email not sent,closed
+Invalid status example,This row will fail,invalid_status
+Missing title,,open
