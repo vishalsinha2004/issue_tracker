@@ -36,7 +36,7 @@ class IssueViewSet(ModelViewSet):
     search_fields = ['title', 'description']
     ordering_fields = ['created_at', 'resolved_at', 'status']
 
-    # 🔹 Create Issue (Timeline)
+
     def perform_create(self, serializer):
         issue = serializer.save()
         IssueHistory.objects.create(
@@ -45,7 +45,6 @@ class IssueViewSet(ModelViewSet):
             description='Issue was created'
         )
 
-    # 🔹 Update Issue (Versioning + Timeline)
     def partial_update(self, request, *args, **kwargs):
         issue = self.get_object()
         old_status = issue.status
@@ -71,7 +70,7 @@ class IssueViewSet(ModelViewSet):
 
         return Response(IssueSerializer(issue).data)
 
-    # 🔹 Add Comment
+    
     @action(detail=True, methods=['post'])
     def comments(self, request, pk=None):
         issue = self.get_object()
@@ -86,7 +85,6 @@ class IssueViewSet(ModelViewSet):
         )
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    # 🔹 Replace Labels
     @action(detail=True, methods=['put'])
     def labels(self, request, pk=None):
         issue = self.get_object()
@@ -105,7 +103,7 @@ class IssueViewSet(ModelViewSet):
         )
         return Response({"message": "Labels updated successfully"})
 
-    # 🔹 Bulk Status Update
+    
     @action(detail=False, methods=['post'])
     def bulk_status(self, request):
         serializer = BulkStatusItemSerializer(data=request.data, many=True)
@@ -121,7 +119,7 @@ class IssueViewSet(ModelViewSet):
 
         return Response({"message": "Bulk status update successful"})
 
-    # 🔹 CSV IMPORT (FINAL FIXED)
+
     @action(
         detail=False,
         methods=['post'],
@@ -154,14 +152,13 @@ class IssueViewSet(ModelViewSet):
             "failed": failed
         }, status=status.HTTP_201_CREATED)
 
-    # 🔹 Timeline
+    
     @action(detail=True, methods=['get'])
     def timeline(self, request, pk=None):
         history = self.get_object().history.order_by('created_at')
         return Response(IssueHistorySerializer(history, many=True).data)
 
 
-# 🔹 REPORT: Top Assignees
 class TopAssigneesReport(APIView):
     def get(self, request):
         return Response(
@@ -172,7 +169,8 @@ class TopAssigneesReport(APIView):
         )
 
 
-# 🔹 REPORT: Average Resolution Time
+
+
 class AverageResolutionTimeReport(APIView):
     def get(self, request):
         data = Issue.objects.filter(resolved_at__isnull=False).annotate(
