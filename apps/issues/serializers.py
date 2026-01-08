@@ -3,7 +3,6 @@ from .models import Issue, Comment, Label, IssueHistory
 from apps.users.serializers import UserSerializer
 
 
-# 🔹 CSV Import Serializer
 class CSVImportSerializer(serializers.Serializer):
     file = serializers.FileField()
 
